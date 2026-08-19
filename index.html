@@ -2,86 +2,32 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>PLAY25</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>play25.com</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
-/* তোমার আগের সব CSS ঠিক আছে */
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;min-height:100%;font-family:Arial,Helvetica,sans-serif;background:#eee;color:#111;}
-.app{width:100%;max-width:720px;min-height:100vh;margin:auto;background:#eee;position:relative;overflow:hidden;}
-.topbar{height:104px;width:100%;background:#2d5599;display:flex;align-items:flex-end;padding:10px 12px;gap:8px;}
-.logo{width:220px;max-width:42vw;height:62px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
-.logo img{width:auto;max-width:100%;height:auto;max-height:62px;object-fit:contain;}
-.logo-text{color:#fff;font-size:34px;font-weight:900;font-style:italic;text-shadow:2px 2px 2px #111;}
-.banner{position:relative;margin:20px 24px 28px;border-radius:28px;overflow:hidden;background:#ddd;aspect-ratio:3.05/1;}
-.slides{width:100%;height:100%;position:relative;}
-.slide{position:absolute;inset:0;opacity:0;transition:opacity.45s ease;}
-.slide.active{opacity:1;}
-.slide img{width:100%;height:100%;display:block;object-fit:cover;}
-.arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:48px;height:75px;border:0;background:rgba(255,255,255,.12);color:#fff;font-size:58px;line-height:1;text-shadow:0 1px 5px #555;}
-.arrow.left{left:4px;}.arrow.right{right:4px;}
-.dots{position:absolute;z-index:6;left:0;right:0;bottom:8px;text-align:center;}
-.dot{display:inline-block;width:8px;height:8px;margin:0 3px;border-radius:50%;background:rgba(255,255,255,.55);}
-.dot.active{background:#fff;transform:scale(1.3);}
-.admin{display:none;position:fixed;z-index:100;inset:0;overflow:auto;background:#eee;}
-.admin-inner{width:min(720px,100%);min-height:100vh;margin:auto;background:#fff;}
-.admin-header{padding:18px;display:flex;align-items:center;justify-content:space-between;background:#2d5599;color:#fff;}
-.admin-close{padding:9px 15px;border:0;border-radius:6px;background:#d60000;color:#fff;}
-.admin-body{padding:18px;}
-.admin-slot{padding:13px;margin-bottom:14px;border:1px solid #ddd;border-radius:10px;}
-.admin-preview{width:100%;height:110px;margin-top:9px;border-radius:7px;object-fit:cover;background:#ddd;}
-.admin-save{padding:13px 18px;border:0;border-radius:7px;background:#168a38;color:#fff;font-weight:700;}
-/* বাকি সব CSS আগের মতোই রাখো */
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial, sans-serif;background:#111}
+.slider{position:relative;width:100%;height:320px;overflow:hidden}
+.slide{position:absolute;width:100%;height:100%;background-size:cover;background-position:center;display:flex;flex-direction:column;justify-content:end;padding:20px;color:white;opacity:0;transition:opacity 1s ease-in-out;text-shadow:2px 2px 6px rgba(0,0,0,0.8)}
+.slide.active{opacity:1}
+.slide h1{font-size:28px;margin-bottom:5px}
+.slide p{font-size:16px}
+.dots{position:absolute;bottom:15px;width:100%;text-align:center}
+.dot{height:10px;width:10px;margin:0 4px;background:#bbb;border-radius:50%;display:inline-block;cursor:pointer}
+.dot.active{background:#fff}
+.loading{color:white;text-align:center;padding:50px}
 </style>
 </head>
 <body>
-<div class="app">
 
-<!-- HOME -->
-<section id="home" class="screen active">
-<header class="topbar">
-<div class="menu" onclick="openMenu()">☰</div>
-<div class="logo">
-<img src="assets/logo.png" alt="PLAY25 Logo" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block';">
-<div id="logoFallback" class="logo-text" style="display:none">PLAY25</div>
+<div class="slider" id="bannerSlider">
+  <div class="loading">Loading Banners...</div>
 </div>
-<button class="topbtn agent" onclick="show('agents')">Agent List</button>
-<button class="topbtn login" onclick="show('login')">👤 Login</button>
-</header>
-
-<!-- BANNER -->
-<div class="banner" id="banner">
-<div class="slides" id="slides"></div>
-<button class="arrow left" onclick="prevSlide()">‹</button>
-<button class="arrow right" onclick="nextSlide()">›</button>
-<div class="dots" id="dots"></div>
-</div>
-
-<!-- বাকি সব আগের মতোই -->
-<div class="notice"><span>📣 &nbsp; smart, play responsibly! 🧨🧨🧨</span></div>
-<main class="section"><h2>Sport</h2><div class="grid"><div class="game"><div class="gi">🏏</div>Cricket</div></div></main>
-
-</section>
-
-<!-- ADMIN PANEL -->
-<div class="admin" id="admin">
-<div class="admin-inner">
-<div class="admin-header"><h2>Banner Admin Panel</h2><button class="admin-close" onclick="closeAdmin()">Close</button></div>
-<div class="admin-body">
-<div class="admin-info"><b>Banner Management</b><br><br>এখানে ৫টি Banner নির্বাচন করুন। Save করার পর সবার Home Page এ দেখা যাবে।</div>
-<div id="adminSlots"></div>
-<button class="admin-save" onclick="saveBanners()">💾 Save 5 Banners</button>
-</div></div></div>
-
-</div>
-
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 
 <script>
-/* ========== FIREBASE CONFIG ========== */
+// তোমার FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyAwTPtmSGvThVxDM7uc-ey-SjD4500KJeI",
   authDomain: "play25agent.firebaseapp.com",
@@ -92,102 +38,56 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const storage = firebase.storage();
 
-/* ========== VARIABLES ========== */
-let banners = ["assets/banner-1.jpg","assets/banner-2.jpg","assets/banner-3.jpg","assets/banner-4.jpg","assets/banner-5.jpg"];
 let currentSlide = 0;
-let sliderTimer = null;
+let slides = [];
+let interval;
 
-/* ========== LOAD BANNERS FROM FIREBASE ========== */
-db.collection("settings").doc("banners").onSnapshot(doc=>{
-    if(doc.exists){
-        let data = doc.data();
-        for(let i=0; i<5; i++){
-            if(data['banner'+(i+1)]) banners[i] = data['banner'+(i+1)];
-        }
+db.collection("banners").orderBy(firebase.firestore.FieldPath.documentId()).get().then(snap=>{
+  let html = '';
+  snap.forEach(doc=>{
+    let d = doc.data();
+    if(d.image){
+      html += `<div class="slide" style="background-image:linear-gradient(to top, rgba(0,0,0,0.7), transparent), url('${d.image}')">
+        <h1>${d.title || ''}</h1>
+        <p>${d.subtitle || ''}</p>
+      </div>`
     }
-    renderSlider();
+  })
+
+  if(html === '') {
+    document.getElementById('bannerSlider').innerHTML = '<div class="loading">No Banners Found. Go to admin.html and Save</div>';
+    return;
+  }
+
+  // dots add
+  let dotHtml = '<div class="dots">';
+  for(let i=0; i<snap.size; i++) dotHtml += `<span class="dot" onclick="showSlide(${i})"></span>`;
+  dotHtml += '</div>';
+
+  document.getElementById('bannerSlider').innerHTML = html + dotHtml;
+  slides = document.querySelectorAll('.slide');
+  showSlide(0);
+  startSlider();
 })
 
-/* ========== RENDER SLIDER ========== */
-function renderSlider(){
-    const slides = document.getElementById("slides");
-    const dots = document.getElementById("dots");
-    slides.innerHTML = ""; dots.innerHTML = "";
-    banners.forEach(function(src,index){
-        const slide = document.createElement("div");
-        slide.className = "slide";
-        if(index === currentSlide) slide.classList.add("active");
-        const img = document.createElement("img");
-        img.src = src; img.alt = "Banner "+(index+1);
-        slide.appendChild(img); slides.appendChild(slide);
-        const dot = document.createElement("span");
-        dot.className = "dot";
-        if(index === currentSlide) dot.classList.add("active");
-        dot.onclick = function(){ goSlide(index); restartSlider(); };
-        dots.appendChild(dot);
-    });
-    restartSlider();
+function showSlide(n){
+  slides.forEach(slide => slide.classList.remove('active'));
+  document.querySelectorAll('.dot').forEach(dot => dot.classList.remove('active'));
+  slides[n].classList.add('active');
+  document.querySelectorAll('.dot')[n].classList.add('active');
+  currentSlide = n;
 }
 
-function goSlide(index){
-    currentSlide = (index + banners.length) % banners.length;
-    document.querySelectorAll(".slide").forEach((slide,i)=>{slide.classList.toggle("active", i === currentSlide);});
-    document.querySelectorAll(".dot").forEach((dot,i)=>{dot.classList.toggle("active", i === currentSlide);});
-}
-function nextSlide(){ goSlide(currentSlide + 1); restartSlider(); }
-function prevSlide(){ goSlide(currentSlide - 1); restartSlider(); }
-function restartSlider(){ clearInterval(sliderTimer); sliderTimer = setInterval(()=>{goSlide(currentSlide + 1)}, 5000); }
-
-/* ========== ADMIN ========== */
-function openAdmin(){
-    const password = prompt("Admin Password:");
-    if(password!== "admin123"){ if(password!== null) alert("Wrong Password"); return; }
-    document.getElementById("admin").style.display = "block"; renderAdmin();
-}
-function closeAdmin(){ document.getElementById("admin").style.display = "none"; }
-
-function renderAdmin(){
-    const container = document.getElementById("adminSlots");
-    container.innerHTML = "";
-    for(let i = 0; i < 5; i++){
-        const slot = document.createElement("div"); slot.className = "admin-slot";
-        const label = document.createElement("label"); label.innerText = "Banner "+(i+1);
-        const input = document.createElement("input"); input.type = "file"; input.id = "bannerInput"+i; input.accept = "image/*";
-        const preview = document.createElement("img"); preview.className = "admin-preview"; preview.id = "preview"+i; preview.src = banners[i];
-        input.onchange = function(e){
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function(event){ preview.src = event.target.result; }
-            reader.readAsDataURL(file);
-        }
-        slot.appendChild(label); slot.appendChild(input); slot.appendChild(preview); container.appendChild(slot);
-    }
+function nextSlide(){
+  currentSlide = (currentSlide + 1) % slides.length;
+  showSlide(currentSlide);
 }
 
-/* ========== SAVE TO FIREBASE ========== */
-function saveBanners(){
-    for(let i=0; i<5; i++){
-        let file = document.getElementById('bannerInput'+i).files[0];
-        if(file){
-            let storageRef = storage.ref('banners/banner'+(i+1)+'.jpg');
-            storageRef.put(file).then(snapshot=>{
-                snapshot.ref.getDownloadURL().then(url=>{
-                    db.collection("settings").doc("banners").set({['banner'+(i+1)]: url}, {merge: true});
-                })
-            })
-        }
-    }
-    alert("✅ ৫টি Banner Firebase এ Save হয়েছে। Home Reload দাও");
-    closeAdmin();
+function startSlider(){
+  interval = setInterval(nextSlide, 4000); // 4 সেকেন্ড পর Change হবে
 }
-
-/* ========== OTHER FUNCTIONS ========== */
-function show(id){ /* আগের show function */ }
-function openMenu(){}
-function closeMenu(){}
-
 </script>
+
 </body>
 </html>
