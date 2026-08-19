@@ -8,37 +8,52 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
+:root{
+  --blue: #0d2a5c;
+  --yellow: #ffc107;
+  --red: #dc3545;
+  --dark: #0a0a0a;
+  --card: #1a1a1a;
+}
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:#0a0a0a;color:#fff;padding-bottom:70px}
+body{background:var(--dark);color:#fff;padding-bottom:70px}
+
 /* Header */
-.header{display:flex;justify-content:space-between;align-items:center;background:#1a1a1a;padding:8px 12px;position:sticky;top:0;z-index:100}
-.logo{font-size:24px;font-weight:bold;color:#ffc107}
+.header{display:flex;justify-content:space-between;align-items:center;background:var(--dark);padding:8px 10px;position:sticky;top:0;z-index:100}
+.logo{font-size:26px;font-weight:bold;color:var(--yellow)}
 .logo span{color:#fff}
-.btn{padding:8px 15px;border:none;border-radius:5px;font-weight:bold;cursor:pointer}
-.btn-agent{background:#ffc107;color:#000}
-.btn-login{background:#dc3545;color:#fff}
+.btn{padding:8px 14px;border:none;border-radius:5px;font-weight:bold;cursor:pointer;font-size:14px}
+.btn-agent{background:var(--yellow);color:#000}
+.btn-login{background:var(--red);color:#fff}
+
 /* Slider */
-.slider{position:relative;width:100%;height:180px;overflow:hidden}
+.slider{position:relative;width:100%;height:190px;overflow:hidden;background:var(--blue)}
 .slide{position:absolute;width:100%;height:100%;background-size:cover;background-position:center;opacity:0;transition:1s}
 .slide.active{opacity:1}
-.dots{position:absolute;bottom:10px;width:100%;text-align:center}
-.dot{height:8px;width:8px;margin:0 3px;background:rgba(255,255,255,0.5);border-radius:50%;display:inline-block}
-.dot.active{background:#ffc107}
+.dots{position:absolute;bottom:8px;width:100%;text-align:center}
+.dot{height:8px;width:8px;margin:0 4px;background:rgba(255,255,255,0.5);border-radius:50%;display:inline-block}
+.dot.active{background:var(--yellow)}
+
 /* Menu */
-.menu{display:flex;justify-content:space-around;background:#222;padding:10px 0}
-.menu-item{text-align:center;font-size:12px;color:#ccc;cursor:pointer}
-.menu-item i{font-size:22px;display:block;margin-bottom:4px;color:#ffc107}
-/* Sports */
-.section-title{background:#1a1a1a;padding:10px;font-weight:bold;border-left:4px solid #ffc107}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:10px;background:#111}
-.card{background:#222;border-radius:8px;padding:15px 5px;text-align:center;font-size:12px}
-.card i{font-size:28px;margin-bottom:5px;color:#ffc107}
+.menu{display:flex;justify-content:space-around;background:var(--blue);padding:12px 0}
+.menu-item{text-align:center;font-size:12px;color:#fff;cursor:pointer;width:20%}
+.menu-item i{font-size:24px;display:block;margin-bottom:4px;color:#fff}
+.menu-item.active{background:rgba(0,0,0,0.2);border-radius:8px}
+
+/* Sport Section */
+.section-title{background:var(--dark);padding:10px 12px;font-weight:bold;border-left:4px solid var(--yellow);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px;background:#f2f2f2}
+.card{background:#fff;border-radius:8px;padding:15px 5px;text-align:center;font-size:12px;color:#000;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+.card i{font-size:28px;margin-bottom:6px;color:var(--blue)}
+
 /* Bottom Nav */
-.bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:#1a1a1a;display:flex;justify-content:space-around;padding:8px 0;border-top:1px solid #333;z-index:100}
+.bottom-nav{position:fixed;bottom:0;left:0;width:100%;background:#000;display:flex;justify-content:space-around;padding:6px 0;border-top:1px solid #333;z-index:100}
 .nav-item{text-align:center;font-size:10px;color:#aaa;cursor:pointer}
-.nav-item i{font-size:20px;display:block;margin-bottom:3px}
-.nav-item.active{color:#ffc107}
-.support{position:fixed;bottom:80px;right:15px;background:#ffc107;color:#000;padding:10px;border-radius:50%;font-weight:bold;z-index:99}
+.nav-item i{font-size:22px;display:block;margin-bottom:3px}
+.nav-item.active{color:var(--yellow)}
+
+/* Support */
+.support{position:fixed;bottom:80px;left:10px;background:var(--yellow);color:#000;padding:8px 12px;border-radius:20px;font-weight:bold;font-size:14px;z-index:99;display:flex;align-items:center;gap:5px}
 </style>
 </head>
 <body>
@@ -47,8 +62,8 @@ body{background:#0a0a0a;color:#fff;padding-bottom:70px}
 <div class="header">
   <div class="logo">PLAY<span>25</span></div>
   <div>
-    <button class="btn btn-agent">Agent List</button>
-    <button class="btn btn-login">Login</button>
+    <a href="https://sikdarvai444-sys.github.io/play25agentlist/index.html"><button class="btn btn-agent">Agent List</button></a>
+    <button class="btn btn-login"><i class="fa fa-user"></i> Login</button>
   </div>
 </div>
 
@@ -57,9 +72,9 @@ body{background:#0a0a0a;color:#fff;padding-bottom:70px}
 
 <!-- Menu -->
 <div class="menu">
-  <div class="menu-item"><i class="fa fa-futbol"></i>Sports</div>
+  <div class="menu-item active"><i class="fa fa-futbol"></i>Sports</div>
   <div class="menu-item"><i class="fa fa-dice"></i>Casino</div>
-  <div class="menu-item"><i class="fa fa-slot-machine"></i>Slots</div>
+  <div class="menu-item"><i class="fa-solid fa-7">77</i>Slots</div>
   <div class="menu-item"><i class="fa fa-table"></i>Table</div>
   <div class="menu-item"><i class="fa fa-rocket"></i>Crash</div>
 </div>
@@ -67,22 +82,24 @@ body{background:#0a0a0a;color:#fff;padding-bottom:70px}
 <!-- Sports Section -->
 <div class="section-title">| Sport</div>
 <div class="grid">
-  <div class="card"><i class="fa fa-cricket"></i><br>Cricket</div>
-  <div class="card"><i class="fa fa-9"></i><br>9wickets</div>
+  <div class="card"><i class="fa fa-cricket-bat"></i><br>Cricket</div>
+  <div class="card"><i class="fa-solid fa-9">9</i><br>9wickets</div>
   <div class="card"><i class="fa fa-futbol"></i><br>Soccer</div>
-  <div class="card"><i class="fa fa-table-tennis"></i><br>Tennis</div>
+  <div class="card"><i class="fa fa-table-tennis-paddle-ball"></i><br>Tennis</div>
   <div class="card"><i class="fa fa-gamepad"></i><br>ESports</div>
   <div class="card"><i class="fa fa-horse"></i><br>Horsebook</div>
   <div class="card"><i class="fa fa-dove"></i><br>SV388</div>
-  <div class="card"><i class="fa fa-chart-line"></i><br>PINN</div>
+  <div class="card"><i class="fa-solid fa-s">S38</i><br>PINNACLE</div>
 </div>
 
-<div class="support">Support</div>
+<div class="section-title">| Favourites</div>
+
+<div class="support"><i class="fa fa-headset"></i> Support</div>
 
 <!-- Bottom Nav -->
 <div class="bottom-nav">
   <div class="nav-item"><i class="fa fa-exchange-alt"></i>Exch</div>
-  <div class="nav-item"><i class="fa fa-play-circle"></i>In Play</div>
+  <div class="nav-item"><i class="fa fa-play-circle"></i>In-Play</div>
   <div class="nav-item active"><i class="fa fa-home"></i>Home</div>
   <div class="nav-item"><i class="fa fa-users"></i>Referral</div>
   <div class="nav-item"><i class="fa fa-user"></i>Account</div>
@@ -106,7 +123,7 @@ let slides = [];
 
 db.collection("banners").orderBy(firebase.firestore.FieldPath.documentId()).get().then(snap=>{
   if(snap.empty){
-    document.getElementById('bannerSlider').innerHTML = '<div style="text-align:center;padding-top:70px">admin.html থেকে Banner Add করুন</div>';
+    document.getElementById('bannerSlider').innerHTML = '<div style="text-align:center;padding-top:70px;color:#fff">admin.html থেকে Banner Add করুন</div>';
     return;
   }
   let html = '';
@@ -128,8 +145,7 @@ db.collection("banners").orderBy(firebase.firestore.FieldPath.documentId()).get(
 function showSlide(n){
   slides.forEach(slide => slide.classList.remove('active'));
   document.querySelectorAll('.dot').forEach(dot => dot.classList.remove('active'));
-  slides[n].classList.add('active');
-  document.querySelectorAll('.dot')[n].classList.add('active');
+  if(slides[n]){slides[n].classList.add('active'); document.querySelectorAll('.dot')[n].classList.add('active');}
 }
 function nextSlide(){
   currentSlide = (currentSlide + 1) % slides.length;
