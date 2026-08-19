@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin - Base64 Banner</title>
+<title>Admin - play25 Banner</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <style>
 body{font-family:Arial;padding:20px;background:#f0f0f0}
-.banner-box{background:white;padding:15px;margin:10px 0;border-radius:8px}
+.banner-box{background:white;padding:15px;margin:10px 0;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
+input[type=text]{width:95%;padding:8px;margin:5px 0}
 input[type=file]{margin:10px 0}
-button{background:#28a745;color:white;border:none;padding:10px 20px;border-radius:5px;cursor:pointer}
-img{max-width:100%;height:150px;object-fit:cover;border-radius:5px;margin-top:10px}
+button{background:#28a745;color:white;border:none;padding:12px 25px;border-radius:5px;cursor:pointer;font-size:16px}
+img{max-width:100%;height:150px;object-fit:cover;border-radius:5px;margin-top:10px;border:1px solid #ddd}
 </style>
 </head>
 <body>
@@ -17,22 +18,22 @@ img{max-width:100%;height:150px;object-fit:cover;border-radius:5px;margin-top:10
 
 <div id="banners"></div>
 <button onclick="saveBanners()">Save 5 Banners</button>
-<p id="status"></p>
+<p id="status" style="font-weight:bold;color:green"></p>
 
 <script>
-// 1. তোমার FIREBASE CONFIG এখানে বসাও
+// তোমার FIREBASE CONFIG
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyAwTPtmSGvThVxDM7uc-ey-SjD4500KJeI",
+  authDomain: "play25agent.firebaseapp.com",
+  projectId: "play25agent",
+  storageBucket: "play25agent.firebasestorage.app",
+  messagingSenderId: "1074050564633",
+  appId: "1:1074050564633:web:eef2b39ef0b7b745dae088"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-let bannerData = [{},{},{},{},{}];
+let bannerData = [{},{},{}];
 
 // ছবিকে Base64 তে কনভার্ট
 function toBase64(file) {
@@ -60,6 +61,10 @@ for(let i=0; i<5; i++){
 async function handleFile(i, e){
   const file = e.target.files[0];
   if(file){
+    if(file.size > 400000){ // 400KB এর বেশি হলে Warning
+      alert("ছবি 400KB এর নিচে রাখো ভাই। নাহলে Firestore Error দিবে");
+      return;
+    }
     bannerData[i].image = await toBase64(file);
     document.getElementById(`preview${i}`).src = bannerData[i].image;
     document.getElementById(`preview${i}`).style.display = 'block';
@@ -68,13 +73,14 @@ async function handleFile(i, e){
 
 async function saveBanners(){
   document.getElementById('status').innerText = "Saving...";
+  document.getElementById('status').style.color = "orange";
   for(let i=0; i<5; i++){
     bannerData[i].title = document.getElementById(`title${i}`).value;
     bannerData[i].subtitle = document.getElementById(`subtitle${i}`).value;
-
     await db.collection("banners").doc("banner"+(i+1)).set(bannerData[i]);
   }
   document.getElementById('status').innerText = "Saved Successfully! ✅";
+  document.getElementById('status').style.color = "green";
 }
 
 // আগের Data Load করা
