@@ -1,202 +1,96 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>PLAY25 Admin Panel</title>
-
-<style>
-/* তোমার আগের সব CSS ঠিক আছে */
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;min-height:100%;font-family:Arial,Helvetica,sans-serif;background:#eef1f5;color:#111;}
-.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#173d78,#2d5599,#0866ad);}
-.login-card{width:100%;max-width:420px;padding:30px 25px;background:#fff;border-radius:18px;box-shadow:0 15px 40px rgba(0,0,0,.25);text-align:center;}
-.logo{width:210px;height:80px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
-.logo-text{color:#2d5599;font-size:38px;font-weight:900;font-style:italic;text-shadow:2px 2px 1px #999;}
-.login-input{width:100%;height:55px;margin-bottom:15px;padding:0 15px;border:1px solid #ccc;border-radius:9px;outline:none;font-size:17px;}
-.login-button{width:100%;height:55px;border:0;border-radius:9px;background:linear-gradient(#176fba,#064c82);color:#fff;font-size:18px;font-weight:700;}
-.admin-app{display:none;width:100%;min-height:100vh;}
-.admin-header{position:sticky;top:0;z-index:20;min-height:72px;padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:15px;background:#2d5599;color:#fff;}
-.logout-button{height:42px;padding:0 14px;border:1px solid rgba(255,255,255,.5);border-radius:7px;background:#d60000;color:#fff;font-size:14px;font-weight:700;}
-.admin-main{width:min(900px,100%);margin:auto;padding:20px 16px 50px;}
-.info-box{margin-bottom:18px;padding:16px;border-left:5px solid #0873ae;border-radius:8px;background:#fff;box-shadow:0 2px 7px rgba(0,0,0,.08);}
-.banner-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
-.banner-card{padding:15px;border:1px solid #ddd;border-radius:12px;background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.07);}
-.banner-card.full{grid-column:1/-1;}
-.preview{width:100%;aspect-ratio:3.05/1;display:block;margin-bottom:12px;border-radius:8px;object-fit:cover;background:#e5e5e5;border:1px solid #ddd;}
-.file-label{width:100%;min-height:48px;display:flex;align-items:center;justify-content:center;padding:8px 10px;border-radius:8px;background:#0872bd;color:#fff;font-size:15px;font-weight:700;text-align:center;cursor:pointer;}
-.file-input{display:none;}
-.actions{position:sticky;bottom:0;z-index:10;margin-top:20px;padding:15px;border-radius:12px 12px 0 0;background:#fff;box-shadow:0 -3px 15px rgba(0,0,0,.12);display:flex;gap:10px;}
-.save-button{flex:1;height:54px;border:0;border-radius:8px;background:linear-gradient(#168a38,#086d28);color:#fff;font-size:17px;font-weight:700;}
-.status{display:none;margin-bottom:18px;padding:13px 15px;border-radius:8px;background:#d9f7df;color:#17652a;font-weight:700;}
-</style>
-
-</head>
-<body>
-
-<!-- LOGIN -->
-<div class="login-page" id="loginPage">
-<div class="login-card">
-<div class="logo"><img src="assets/logo.png" alt="PLAY25" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block';"><div id="logoFallback" class="logo-text" style="display:none;">PLAY25</div></div>
-<div style="margin-bottom:7px;font-size:25px;font-weight:700;">Admin Panel</div>
-<div style="margin-bottom:22px;color:#777;font-size:14px;">PLAY25 Banner Management</div>
-<input id="adminPassword" class="login-input" type="password" placeholder="Admin Password">
-<button class="login-button" onclick="adminLogin()">Login to Admin Panel</button>
-<div id="loginError" style="min-height:22px;margin-top:12px;color:#d60000;font-size:14px;"></div>
-</div>
-</div>
-
-<!-- ADMIN APP -->
-<div class="admin-app" id="adminApp">
-<header class="admin-header">
-<div><b>Admin Panel</b></div>
-<button class="logout-button" onclick="logout()">Logout</button>
-</header>
-
-<main class="admin-main">
-<div class="info-box">
-<strong>🎯 Banner Management</strong><br>
-এখান থেকে Home Page-এর ৫টি বড় Banner পরিবর্তন করুন।<br>
-Save করার পর Home Page Reload করলে নতুন Banner দেখা যাবে।
-</div>
-
-<div id="status" class="status">✓ Banner সফলভাবে Save হয়েছে।</div>
-
-<div class="banner-grid" id="bannerGrid"></div>
-
-<div class="actions">
-<button class="save-button" onclick="saveBanners()">💾 Save 5 Banners</button>
-</div>
-</main>
-</div>
-
-<!-- Firebase SDK -->
+<title>Admin - Base64 Banner</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+<style>
+body{font-family:Arial;padding:20px;background:#f0f0f0}
+.banner-box{background:white;padding:15px;margin:10px 0;border-radius:8px}
+input[type=file]{margin:10px 0}
+button{background:#28a745;color:white;border:none;padding:10px 20px;border-radius:5px;cursor:pointer}
+img{max-width:100%;height:150px;object-fit:cover;border-radius:5px;margin-top:10px}
+</style>
+</head>
+<body>
+<h2>Banner Upload - Base64 System</h2>
+
+<div id="banners"></div>
+<button onclick="saveBanners()">Save 5 Banners</button>
+<p id="status"></p>
 
 <script>
-/* ========== FIREBASE CONFIG ========== */
+// 1. তোমার FIREBASE CONFIG এখানে বসাও
 const firebaseConfig = {
-  apiKey: "AIzaSyAwTPtmSGvThVxDM7uc-ey-SjD4500KJeI",
-  authDomain: "play25agent.firebaseapp.com",
-  projectId: "play25agent",
-  storageBucket: "play25agent.firebasestorage.app",
-  messagingSenderId: "1074050564633",
-  appId: "1:1074050564633:web:eef2b39ef0b7b745dae088"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const storage = firebase.storage();
 
-const ADMIN_PASSWORD = "admin123";
-let banners = ["assets/banner-1.jpg","assets/banner-2.jpg","assets/banner-3.jpg","assets/banner-4.jpg","assets/banner-5.jpg"];
+let bannerData = [{},{},{},{},{}];
 
-/* ========== LOGIN ========== */
-function adminLogin(){
-    const password = document.getElementById("adminPassword").value.trim();
-    const error = document.getElementById("loginError");
-    if(password === ADMIN_PASSWORD){
-        sessionStorage.setItem("play25_admin_login","1");
-        document.getElementById("loginPage").style.display = "none";
-        document.getElementById("adminApp").style.display = "block";
-        loadBannersFromFirebase();
-        renderBannerCards();
-    }else{ error.innerText = "❌ ভুল Admin Password"; }
-}
-
-function logout(){
-    sessionStorage.removeItem("play25_admin_login");
-    document.getElementById("adminApp").style.display = "none";
-    document.getElementById("loginPage").style.display = "flex";
-    document.getElementById("adminPassword").value = "";
-}
-
-/* ========== LOAD FROM FIREBASE ========== */
-function loadBannersFromFirebase(){
-    db.collection("settings").doc("banners").get().then(doc=>{
-        if(doc.exists){
-            let data = doc.data();
-            for(let i=0; i<5; i++){
-                if(data['banner'+(i+1)]) banners[i] = data['banner'+(i+1)];
-            }
-        }
-    })
-}
-
-/* ========== RENDER CARDS ========== */
-function renderBannerCards(){
-    const grid = document.getElementById("bannerGrid");
-    grid.innerHTML = "";
-    for(let i = 0; i < 5; i++){
-        const card = document.createElement("div");
-        card.className = "banner-card";
-        if(i === 0) card.classList.add("full");
-        card.innerHTML = `
-            <div class="banner-number">Banner ${i+1}</div>
-            <img class="preview" id="preview-${i}" src="${banners[i]}">
-            <label class="file-label">📷 নতুন ছবি নির্বাচন করুন
-                <input type="file" id="file-${i}" class="file-input" accept="image/*">
-            </label>
-            <div class="file-name" id="filename-${i}">বর্তমান Banner ${i+1}</div>
-        `;
-        grid.appendChild(card);
-        document.getElementById(`file-${i}`).onchange = function(e){ handleImage(i, e.target.files[0]); }
-    }
-}
-
-/* ========== HANDLE IMAGE UPLOAD ========== */
-function handleImage(index, file){
-    if(!file) return;
+// ছবিকে Base64 তে কনভার্ট
+function toBase64(file) {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = function(event){
-        document.getElementById(`preview-${index}`).src = event.target.result;
-        document.getElementById(`filename-${index}`).innerText = "নতুন ছবি: " + file.name;
-        banners[index] = {file: file, preview: event.target.result}; // file save রাখলাম
-    };
     reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
 }
 
-/* ========== SAVE TO FIREBASE ========== */
-function saveBanners(){
-    let uploadCount = 0;
-    for(let i=0; i<5; i++){
-        let fileInput = document.getElementById(`file-${i}`);
-        if(fileInput.files[0]){
-            let file = fileInput.files[0];
-            let storageRef = storage.ref('banners/banner'+(i+1)+'.jpg');
-            storageRef.put(file).then(snapshot=>{
-                snapshot.ref.getDownloadURL().then(url=>{
-                    db.collection("settings").doc("banners").set({['banner'+(i+1)]: url}, {merge: true});
-                    uploadCount++;
-                    if(uploadCount === 5) showStatus("✓ ৫টি Banner Firebase এ Save হয়েছে।");
-                })
-            }).catch(e=>alert("Error: "+e));
-        } else {
-            // যদি নতুন ছবি না দেয়, আগেরটা রেখে দিবে
-            db.collection("settings").doc("banners").set({['banner'+(i+1)]: banners[i]}, {merge: true});
-        }
+// 5 টা ইনপুট বক্স বানানো
+const container = document.getElementById('banners');
+for(let i=0; i<5; i++){
+  container.innerHTML += `
+  <div class="banner-box">
+    <h3>Banner ${i+1}</h3>
+    <input type="text" id="title${i}" placeholder="Title"><br>
+    <input type="text" id="subtitle${i}" placeholder="Subtitle"><br>
+    <input type="file" id="file${i}" accept="image/*" onchange="handleFile(${i}, event)">
+    <img id="preview${i}" style="display:none">
+  </div>`
+}
+
+async function handleFile(i, e){
+  const file = e.target.files[0];
+  if(file){
+    bannerData[i].image = await toBase64(file);
+    document.getElementById(`preview${i}`).src = bannerData[i].image;
+    document.getElementById(`preview${i}`).style.display = 'block';
+  }
+}
+
+async function saveBanners(){
+  document.getElementById('status').innerText = "Saving...";
+  for(let i=0; i<5; i++){
+    bannerData[i].title = document.getElementById(`title${i}`).value;
+    bannerData[i].subtitle = document.getElementById(`subtitle${i}`).value;
+
+    await db.collection("banners").doc("banner"+(i+1)).set(bannerData[i]);
+  }
+  document.getElementById('status').innerText = "Saved Successfully! ✅";
+}
+
+// আগের Data Load করা
+db.collection("banners").get().then(snap=>{
+  snap.forEach(doc=>{
+    let i = parseInt(doc.id.replace('banner',''))-1;
+    let data = doc.data();
+    if(data.title) document.getElementById(`title${i}`).value = data.title;
+    if(data.subtitle) document.getElementById(`subtitle${i}`).value = data.subtitle;
+    if(data.image) {
+      bannerData[i].image = data.image;
+      document.getElementById(`preview${i}`).src = data.image;
+      document.getElementById(`preview${i}`).style.display = 'block';
     }
-    if(uploadCount === 0) showStatus("✓ Banner গুলো Update করা হয়েছে।");
-}
-
-function showStatus(message){
-    const status = document.getElementById("status");
-    status.innerText = message;
-    status.style.display = "block";
-    setTimeout(()=>{status.style.display = "none";}, 4000);
-}
-
-/* ========== CHECK SESSION ========== */
-(function(){
-    if(sessionStorage.getItem("play25_admin_login") === "1"){
-        document.getElementById("loginPage").style.display = "none";
-        document.getElementById("adminApp").style.display = "block";
-        loadBannersFromFirebase();
-        renderBannerCards();
-    }
-})();
+  })
+})
 </script>
-
 </body>
 </html>
