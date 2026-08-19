@@ -1,27 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="bn">
 <head>
-<title>Admin - play25 Banner</title>
+<meta charset="UTF-8">
+<title>Banner Admin</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 <style>
-body{font-family:Arial;padding:20px;background:#f0f0f0}
-.banner-box{background:white;padding:15px;margin:10px 0;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
-input[type=text]{width:95%;padding:8px;margin:5px 0}
-input[type=file]{margin:10px 0}
-button{background:#28a745;color:white;border:none;padding:12px 25px;border-radius:5px;cursor:pointer;font-size:16px}
-img{max-width:100%;height:150px;object-fit:cover;border-radius:5px;margin-top:10px;border:1px solid #ddd}
+body{background:#111;color:#fff;font-family:Arial;padding:20px}
+input,button{padding:10px;margin:5px;border-radius:5px;border:none}
+button{background:#ffc107;color:#000;font-weight:bold;cursor:pointer}
+.box{border:1px solid #333;padding:15px;margin:10px 0;border-radius:8px}
+img{max-width:300px;margin-top:10px;border-radius:5px}
 </style>
 </head>
 <body>
-<h2>Banner Upload - Base64 System</h2>
+<h2>Banner Upload</h2>
+<div class="box">
+  <input type="file" id="bannerFile" accept="image/*">
+  <button onclick="uploadBanner()">Upload Banner</button>
+  <div id="preview"></div>
+</div>
 
-<div id="banners"></div>
-<button onclick="saveBanners()">Save 5 Banners</button>
-<p id="status" style="font-weight:bold;color:green"></p>
+<h3>Existing Banners</h3>
+<div id="bannerList"></div>
 
 <script>
-// তোমার FIREBASE CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyAwTPtmSGvThVxDM7uc-ey-SjD4500KJeI",
   authDomain: "play25agent.firebaseapp.com",
@@ -33,70 +37,31 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-let bannerData = [{},{},{}];
+function uploadBanner(){
+  const file = document.getElementById('bannerFile').files[0];
+  if(!file) return alert('ছবি সিলেক্ট করুন');
 
-// ছবিকে Base64 তে কনভার্ট
-function toBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
-}
-
-// 5 টা ইনপুট বক্স বানানো
-const container = document.getElementById('banners');
-for(let i=0; i<5; i++){
-  container.innerHTML += `
-  <div class="banner-box">
-    <h3>Banner ${i+1}</h3>
-    <input type="text" id="title${i}" placeholder="Title"><br>
-    <input type="text" id="subtitle${i}" placeholder="Subtitle"><br>
-    <input type="file" id="file${i}" accept="image/*" onchange="handleFile(${i}, event)">
-    <img id="preview${i}" style="display:none">
-  </div>`
-}
-
-async function handleFile(i, e){
-  const file = e.target.files[0];
-  if(file){
-    if(file.size > 400000){ // 400KB এর বেশি হলে Warning
-      alert("ছবি 400KB এর নিচে রাখো ভাই। নাহলে Firestore Error দিবে");
-      return;
-    }
-    bannerData[i].image = await toBase64(file);
-    document.getElementById(`preview${i}`).src = bannerData[i].image;
-    document.getElementById(`preview${i}`).style.display = 'block';
+  const reader = new FileReader();
+  reader.onload = function(e){
+    db.collection("banners").add({
+      image: e.target.result,
+      createdAt: new Date()
+    }).then(()=>{alert('Upload Success'); loadBanners();})
   }
+  reader.readAsDataURL(file);
 }
 
-async function saveBanners(){
-  document.getElementById('status').innerText = "Saving...";
-  document.getElementById('status').style.color = "orange";
-  for(let i=0; i<5; i++){
-    bannerData[i].title = document.getElementById(`title${i}`).value;
-    bannerData[i].subtitle = document.getElementById(`subtitle${i}`).value;
-    await db.collection("banners").doc("banner"+(i+1)).set(bannerData[i]);
-  }
-  document.getElementById('status').innerText = "Saved Successfully! ✅";
-  document.getElementById('status').style.color = "green";
-}
-
-// আগের Data Load করা
-db.collection("banners").get().then(snap=>{
-  snap.forEach(doc=>{
-    let i = parseInt(doc.id.replace('banner',''))-1;
-    let data = doc.data();
-    if(data.title) document.getElementById(`title${i}`).value = data.title;
-    if(data.subtitle) document.getElementById(`subtitle${i}`).value = data.subtitle;
-    if(data.image) {
-      bannerData[i].image = data.image;
-      document.getElementById(`preview${i}`).src = data.image;
-      document.getElementById(`preview${i}`).style.display = 'block';
-    }
+function loadBanners(){
+  db.collection("banners").get().then(snap=>{
+    let html = '';
+    snap.forEach(doc=>{
+      html += `<div class="box"><img src="${doc.data().image}"><br>
+      <button onclick="db.collection('banners').doc('${doc.id}').delete().then(loadBanners)">Delete</button></div>`
+    })
+    document.getElementById('bannerList').innerHTML = html;
   })
-})
+}
+loadBanners();
 </script>
 </body>
 </html>
