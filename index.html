@@ -18,11 +18,11 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 body{background:var(--dark);color:#fff;padding-bottom:70px}
 
-/* Header - শুধু এখানে চেঞ্জ */
+/* Header - শুধু এখানে 1টা লাইন চেঞ্জ */
 .header{display:flex;justify-content:space-between;align-items:center;background:var(--blue);padding:4px 8px;position:sticky;top:0;z-index:100;height:52px;}
-.header-left{display:flex;align-items:center;gap:8px;} /* gap কমাইলাম */
+.header-left{display:flex;align-items:center;gap:8px;}
 .menu-icon{font-size:24px; color:#fff; cursor:pointer; padding:5px;}
-.logo{height:38px; display:flex; align-items:center;} /* logo height fix */
+.logo{height:44px; display:flex; align-items:center;} /* 38px থেকে 44px করলাম */
 .logo img{height:100%; width:auto; object-fit:contain;}
 .btn{padding:8px 12px;border:none;border-radius:5px;font-weight:bold;cursor:pointer;font-size:13px;text-decoration:none;display:inline-block}
 .btn-agent{background:var(--yellow);color:#000}
@@ -151,6 +151,7 @@ function showSlide(n){
   slides.forEach(slide => slide.classList.remove('active'));
   document.querySelectorAll('.dot').forEach(dot => dot.classList.remove('active'));
   if(slides[n]){slides[n].classList.add('active'); document.querySelectorAll('.dot')[n].classList.add('active');}
+} // bracket fix
 function nextSlide(){
   currentSlide = (currentSlide + 1) % slides.length;
   showSlide(currentSlide);
