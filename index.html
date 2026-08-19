@@ -18,10 +18,10 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 body{background:var(--dark);color:#fff;padding-bottom:70px}
 
-/* Header */
-.header{display:flex;justify-content:space-between;align-items:center;background:var(--dark);padding:8px 10px;position:sticky;top:0;z-index:100}
-.logo{display:flex;align-items:center;height:40px;} /* height বাড়ায় দিলাম */
-.logo img{height:100%; width:auto; object-fit:contain;} /* পুরা জায়গা নিবে */
+/* Header - শুধু এখানে চেঞ্জ */
+.header{display:flex;justify-content:space-between;align-items:center;background:var(--dark);padding:5px 10px;position:sticky;top:0;z-index:100;height:55px;} /* height 55px + padding কমাইলাম */
+.logo{display:flex;align-items:center;height:100%;} /* 100% */
+.logo img{height:100%; width:auto; object-fit:contain;} /* logo পুরা ফিলাপ হবে */
 .btn{padding:8px 14px;border:none;border-radius:5px;font-weight:bold;cursor:pointer;font-size:14px;text-decoration:none;display:inline-block}
 .btn-agent{background:var(--yellow);color:#000}
 .btn-login{background:var(--red);color:#fff}
@@ -60,7 +60,7 @@ body{background:var(--dark);color:#fff;padding-bottom:70px}
 
 <!-- Header -->
 <div class="header">
-  <div class="logo"><img src="logo.png" alt="PLAY25 Logo"></div> <!-- logo.png বসলো -->
+  <div class="logo"><img src="logo.png" alt="PLAY25 Logo"></div>
   <div>
     <a href="https://sikdarvai444-sys.github.io/play25agentlist/index.html" class="btn btn-agent">Agent List</a>
     <button class="btn btn-login"><i class="fa fa-user"></i> Login</button>
@@ -146,7 +146,6 @@ function showSlide(n){
   slides.forEach(slide => slide.classList.remove('active'));
   document.querySelectorAll('.dot').forEach(dot => dot.classList.remove('active'));
   if(slides[n]){slides[n].classList.add('active'); document.querySelectorAll('.dot')[n].classList.add('active');}
-}
 function nextSlide(){
   currentSlide = (currentSlide + 1) % slides.length;
   showSlide(currentSlide);
