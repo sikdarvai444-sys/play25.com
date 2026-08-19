@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Home</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<style>
+.banner{width:100%;height:300px;background-size:cover;background-position:center;color:white;padding:20px}
+</style>
+</head>
+<body>
+<div id="bannerSlider"></div>
+
+<script>
+const firebaseConfig = { // এখানেও একই Config বসাও
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+db.collection("banners").get().then(snap=>{
+  let html = '';
+  snap.forEach(doc=>{
+    let d = doc.data();
+    html += `<div class="banner" style="background-image:url('${d.image}')">
+      <h1>${d.title}</h1>
+      <p>${d.subtitle}</p>
+    </div>`
+  })
+  document.getElementById('bannerSlider').innerHTML = html;
+})
+</script>
+</body>
+</html>
