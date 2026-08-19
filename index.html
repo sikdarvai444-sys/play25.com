@@ -1,43 +1,60 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
+
 <meta name="viewport"
-      content="width=device-width,initial-scale=1,
-      maximum-scale=1,user-scalable=no">
+content="width=device-width,
+initial-scale=1,
+maximum-scale=1,
+user-scalable=no">
 
 <title>PLAY25</title>
 
 <style>
+
+/* =========================
+   RESET
+========================= */
+
 *{
-    box-sizing:border-box;
     margin:0;
     padding:0;
+    box-sizing:border-box;
 }
 
-html,body{
+html,
+body{
+    width:100%;
+    min-height:100%;
     font-family:Arial,Helvetica,sans-serif;
     background:#eee;
     color:#111;
 }
 
 body{
-    min-height:100vh;
+    overflow-x:hidden;
+}
+
+button,
+input{
+    font:inherit;
 }
 
 button{
-    font:inherit;
+    cursor:pointer;
 }
 
 .app{
     width:100%;
     max-width:720px;
-    margin:auto;
     min-height:100vh;
+    margin:auto;
     background:#eee;
-    overflow:hidden;
     position:relative;
+    overflow:hidden;
 }
+
 
 /* =========================
    TOP BAR
@@ -45,30 +62,48 @@ button{
 
 .topbar{
     height:104px;
+    width:100%;
     background:#2d5599;
+
     display:flex;
     align-items:flex-end;
+
     padding:10px 12px;
-    gap:10px;
+    gap:8px;
 }
 
 .menu{
-    font-size:38px;
-    color:#fff;
     width:42px;
-    text-align:center;
+    color:#fff;
+    font-size:38px;
     line-height:1;
+    text-align:center;
+    cursor:pointer;
 }
 
 .logo{
     width:220px;
     max-width:42vw;
     height:62px;
+
     display:flex;
     align-items:center;
     justify-content:center;
+
+    overflow:hidden;
+}
+
+.logo img{
+    width:auto;
+    max-width:100%;
+    height:auto;
+    max-height:62px;
+    object-fit:contain;
+}
+
+.logo-text{
     color:#fff;
-    font-size:36px;
+    font-size:34px;
     font-weight:900;
     font-style:italic;
     text-shadow:2px 2px 2px #111;
@@ -76,12 +111,15 @@ button{
 
 .topbtn{
     height:52px;
+    padding:0 14px;
+
     border-radius:6px;
     border:1px solid #111;
+
     color:#fff;
-    font-weight:700;
     font-size:20px;
-    padding:0 18px;
+    font-weight:700;
+
     white-space:nowrap;
 }
 
@@ -92,6 +130,7 @@ button{
 .login{
     background:linear-gradient(#ff4b4b,#d60000);
 }
+
 
 /* =========================
    SCREEN
@@ -105,36 +144,191 @@ button{
     display:block;
 }
 
+
 /* =========================
-   HOME
+   BANNER
 ========================= */
 
 .banner{
+    position:relative;
+
     margin:20px 24px 28px;
+
     border-radius:28px;
+
     overflow:hidden;
+
+    background:#ddd;
+
+    aspect-ratio:3.05/1;
+
+    touch-action:pan-y;
 }
 
-.banner img{
-    display:block;
+.slides{
     width:100%;
-    height:auto;
+    height:100%;
+    position:relative;
 }
+
+.slide{
+    position:absolute;
+    inset:0;
+
+    opacity:0;
+
+    transition:opacity .45s ease;
+}
+
+.slide.active{
+    opacity:1;
+}
+
+.slide img{
+    width:100%;
+    height:100%;
+
+    display:block;
+
+    object-fit:cover;
+}
+
+.slide-empty{
+    width:100%;
+    height:100%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#ddd;
+
+    color:#555;
+    font-weight:bold;
+}
+
+
+/* ARROWS */
+
+.arrow{
+    position:absolute;
+
+    top:50%;
+    transform:translateY(-50%);
+
+    z-index:5;
+
+    width:48px;
+    height:75px;
+
+    border:0;
+
+    background:rgba(255,255,255,.12);
+
+    color:#fff;
+
+    font-size:58px;
+
+    line-height:1;
+
+    text-shadow:0 1px 5px #555;
+}
+
+.arrow.left{
+    left:4px;
+}
+
+.arrow.right{
+    right:4px;
+}
+
+
+/* DOTS */
+
+.dots{
+    position:absolute;
+
+    z-index:6;
+
+    left:0;
+    right:0;
+    bottom:8px;
+
+    text-align:center;
+}
+
+.dot{
+    display:inline-block;
+
+    width:8px;
+    height:8px;
+
+    margin:0 3px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.55);
+}
+
+.dot.active{
+    background:#fff;
+    transform:scale(1.3);
+}
+
+
+/* =========================
+   NOTICE
+========================= */
 
 .notice{
     height:58px;
+
     background:#0866ad;
+
     color:#fff;
+
     display:flex;
     align-items:center;
+
     padding:0 24px;
+
     font-size:20px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
 }
+
+.notice span{
+    display:inline-block;
+
+    animation:noticeMove 15s linear infinite;
+}
+
+@keyframes noticeMove{
+
+    0%{
+        transform:translateX(100%);
+    }
+
+    100%{
+        transform:translateX(-100%);
+    }
+
+}
+
+
+/* =========================
+   CATEGORY
+========================= */
 
 .categories{
     height:145px;
+
     background:#00518b;
+
     display:flex;
+
     overflow-x:auto;
 }
 
@@ -144,52 +338,115 @@ button{
 
 .cat{
     min-width:125px;
-    color:#fff;
-    text-align:center;
+
     padding:20px 8px 10px;
-    border-right:1px solid rgba(255,255,255,.08);
+
+    color:#fff;
+
+    text-align:center;
+
     font-weight:700;
+
+    border-right:1px solid rgba(255,255,255,.08);
 }
 
 .cat .ico{
-    font-size:44px;
     display:block;
+
     height:60px;
+
+    font-size:44px;
 }
 
+
+/* =========================
+   HOME SECTION
+========================= */
+
 .section{
-    padding:20px 18px 110px;
+    padding:20px 18px 120px;
+
     background:#eee;
 }
 
 .section h2{
-    font-size:22px;
-    border-left:6px solid #0873ae;
-    padding-left:7px;
     margin-bottom:18px;
+
+    padding-left:8px;
+
+    border-left:6px solid #0873ae;
+
+    font-size:22px;
 }
 
+
+/* SPORT GRID */
+
 .grid{
+    width:100%;
+
     display:grid;
+
     grid-template-columns:repeat(4,1fr);
+
     background:#fff;
 }
 
 .game{
     height:145px;
+
     border:1px solid #eee;
+
     display:flex;
+
+    flex-direction:column;
+
     align-items:center;
     justify-content:center;
-    flex-direction:column;
+
     text-align:center;
+
     font-size:18px;
 }
 
 .game .gi{
-    font-size:48px;
     margin-bottom:10px;
+
+    font-size:48px;
 }
+
+
+/* =========================
+   FAVOURITES
+========================= */
+
+.favourites{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:14px;
+}
+
+.favourite{
+    height:130px;
+
+    overflow:hidden;
+
+    border-radius:8px;
+
+    background:#ddd;
+}
+
+.favourite img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    display:block;
+}
+
 
 /* =========================
    AGENT LIST
@@ -197,18 +454,30 @@ button{
 
 .agent-tabs{
     height:76px;
-    background:#064c82;
+
     display:flex;
-    overflow:hidden;
+
+    overflow-x:auto;
+
+    background:#064c82;
+
     color:#fff;
+
     font-weight:700;
+}
+
+.agent-tabs::-webkit-scrollbar{
+    display:none;
 }
 
 .agent-tabs div{
     min-width:125px;
+
     display:flex;
+
     align-items:center;
     justify-content:center;
+
     font-size:21px;
 }
 
@@ -216,47 +485,82 @@ button{
     background:#0872bd;
 }
 
+.agent-boxes{
+    height:165px;
+
+    padding:0 28px;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:18px;
+
+    background:#eee;
+}
+
+.agent-box{
+    background:#fff;
+
+    border-radius:0 0 6px 6px;
+
+    padding:95px 20px 10px;
+
+    font-size:22px;
+}
+
 .brand-grid{
     display:grid;
+
     grid-template-columns:1fr 1fr;
+
     gap:26px 24px;
+
     padding:22px 28px 120px;
+
     background:#e9e9e9;
 }
 
 .brand-title{
     grid-column:1/-1;
+
+    color:#555;
+
     font-size:24px;
     font-weight:700;
-    color:#555;
-    margin-bottom:-5px;
 }
 
 .person{
-    font-weight:700;
     font-size:18px;
+    font-weight:700;
     line-height:1.35;
 }
 
 .person .sig{
-    font-family:cursive;
-    font-size:40px;
-    font-weight:400;
     height:65px;
+
+    font-family:cursive;
+
+    font-size:40px;
+
+    font-weight:400;
 }
 
 .person em{
     font-weight:700;
 }
 
+
 /* =========================
    LOGIN
 ========================= */
 
 .login-screen{
-    background:#82b20a;
     min-height:calc(100vh - 104px);
-    padding-bottom:25px;
+
+    background:#82b20a;
+
+    padding-bottom:30px;
 }
 
 .hero{
@@ -265,20 +569,29 @@ button{
 
 .hero img{
     width:100%;
+
     display:block;
 }
 
 .close{
     position:absolute;
-    right:10px;
+
     top:12px;
+    right:10px;
+
     width:68px;
     height:68px;
+
     border-radius:50%;
-    background:#222;
+
     border:1px solid #555;
+
+    background:#222;
+
     color:#fff;
+
     font-size:48px;
+
     line-height:58px;
 }
 
@@ -287,14 +600,20 @@ button{
 }
 
 .input{
-    height:70px;
-    background:#fff;
-    border:2px solid #ddd;
-    border-radius:12px;
-    margin-bottom:22px;
-    padding:0 14px;
-    font-size:25px;
     width:100%;
+    height:70px;
+
+    margin-bottom:22px;
+
+    padding:0 14px;
+
+    border:2px solid #ddd;
+
+    border-radius:12px;
+
+    background:#fff;
+
+    font-size:25px;
 }
 
 .code-row{
@@ -303,59 +622,85 @@ button{
 
 .code{
     position:absolute;
+
     right:14px;
     top:8px;
+
     font-size:38px;
     font-weight:900;
 }
 
 .submit{
-    height:78px;
     width:100%;
-    border-radius:12px;
-    background:linear-gradient(#444,#151515);
-    color:#84b10c;
-    font-weight:700;
-    font-size:24px;
+    height:78px;
+
     border:2px solid #111;
+
+    border-radius:12px;
+
+    background:linear-gradient(#444,#151515);
+
+    color:#84b10c;
+
+    font-size:24px;
+    font-weight:700;
 }
 
 .links{
-    text-align:center;
     margin-top:28px;
+
+    text-align:center;
+
     font-size:18px;
+
     line-height:1.9;
 }
 
 .links a{
     color:#222;
+
     text-decoration:underline;
 }
 
+
 /* =========================
-   FLOATING BUTTONS
+   FLOATING SUPPORT
 ========================= */
 
 .support{
     position:fixed;
+
     z-index:20;
-    left:24px;
+
+    left:max(20px,calc(50% - 336px));
+
     bottom:75px;
-    background:#ffd51f;
-    border-radius:12px;
+
     padding:16px 22px;
-    font-size:22px;
-    font-weight:700;
+
+    border-radius:12px;
+
+    background:#ffd51f;
+
     box-shadow:0 2px 5px #999;
+
+    font-size:22px;
+
+    font-weight:700;
 }
 
 .wheel{
     position:fixed;
-    right:18px;
-    bottom:135px;
-    font-size:60px;
+
     z-index:19;
+
+    right:max(12px,calc(50% - 335px));
+
+    bottom:130px;
+
+    font-size:60px;
 }
+
 
 /* =========================
    BOTTOM NAV
@@ -363,26 +708,41 @@ button{
 
 .bottom{
     position:fixed;
+
     z-index:30;
-    bottom:0;
+
     left:50%;
+    bottom:0;
+
     transform:translateX(-50%);
+
     width:min(720px,100%);
+
     height:92px;
-    background:#000;
-    border-radius:42px 42px 0 0;
+
     display:grid;
+
     grid-template-columns:repeat(5,1fr);
+
+    background:#000;
+
     color:#fff;
+
+    border-radius:42px 42px 0 0;
 }
 
 .nav{
     display:flex;
+
+    flex-direction:column;
+
     align-items:center;
     justify-content:center;
-    flex-direction:column;
-    font-size:14px;
+
     gap:4px;
+
+    font-size:14px;
+
     cursor:pointer;
 }
 
@@ -392,8 +752,202 @@ button{
 
 .nav.active{
     background:#285bb4;
+
     border-radius:45px 45px 0 0;
 }
+
+
+/* =========================
+   SIDE MENU
+========================= */
+
+.drawer-bg{
+    display:none;
+
+    position:fixed;
+
+    z-index:50;
+
+    inset:0;
+
+    background:rgba(0,0,0,.5);
+}
+
+.drawer{
+    width:290px;
+    max-width:82vw;
+
+    height:100%;
+
+    background:#fff;
+
+    box-shadow:4px 0 15px rgba(0,0,0,.3);
+}
+
+.drawer-head{
+    padding:22px;
+
+    background:#2d5599;
+
+    color:#fff;
+
+    font-size:25px;
+
+    font-weight:700;
+}
+
+.drawer-item{
+    padding:18px 20px;
+
+    border-bottom:1px solid #eee;
+
+    font-size:18px;
+
+    cursor:pointer;
+}
+
+
+/* =========================
+   ADMIN PANEL
+========================= */
+
+.admin{
+    display:none;
+
+    position:fixed;
+
+    z-index:100;
+
+    inset:0;
+
+    overflow:auto;
+
+    background:#eee;
+}
+
+.admin-inner{
+    width:min(720px,100%);
+
+    min-height:100vh;
+
+    margin:auto;
+
+    background:#fff;
+}
+
+.admin-header{
+    padding:18px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    background:#2d5599;
+
+    color:#fff;
+}
+
+.admin-header h2{
+    font-size:22px;
+}
+
+.admin-close{
+    padding:9px 15px;
+
+    border:0;
+
+    border-radius:6px;
+
+    background:#d60000;
+
+    color:#fff;
+}
+
+.admin-body{
+    padding:18px;
+}
+
+.admin-info{
+    padding:13px;
+
+    margin-bottom:15px;
+
+    border:1px solid #dfc54b;
+
+    border-radius:8px;
+
+    background:#fff4c2;
+
+    line-height:1.5;
+}
+
+.admin-slot{
+    padding:13px;
+
+    margin-bottom:14px;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+}
+
+.admin-slot label{
+    display:block;
+
+    margin-bottom:8px;
+
+    font-weight:700;
+}
+
+.admin-slot input{
+    width:100%;
+}
+
+.admin-preview{
+    width:100%;
+
+    height:110px;
+
+    margin-top:9px;
+
+    border-radius:7px;
+
+    object-fit:cover;
+
+    background:#ddd;
+}
+
+.admin-save{
+    padding:13px 18px;
+
+    border:0;
+
+    border-radius:7px;
+
+    background:#168a38;
+
+    color:#fff;
+
+    font-weight:700;
+}
+
+.admin-reset{
+    padding:13px 18px;
+
+    margin-left:8px;
+
+    border:0;
+
+    border-radius:7px;
+
+    background:#d60000;
+
+    color:#fff;
+
+    font-weight:700;
+}
+
 
 /* =========================
    MOBILE
@@ -403,29 +957,52 @@ button{
 
     .topbar{
         height:92px;
+
         padding:8px;
-        gap:7px;
+
+        gap:5px;
+    }
+
+    .menu{
+        width:35px;
+
+        font-size:32px;
     }
 
     .logo{
         width:180px;
-        font-size:30px;
+
+        height:55px;
+    }
+
+    .logo img{
+        max-height:55px;
+    }
+
+    .logo-text{
+        font-size:29px;
     }
 
     .topbtn{
         height:46px;
-        font-size:17px;
-        padding:0 10px;
-    }
 
-    .menu{
-        font-size:32px;
-        width:35px;
+        padding:0 8px;
+
+        font-size:16px;
     }
 
     .banner{
         margin:16px 20px 24px;
+
         border-radius:25px;
+    }
+
+    .arrow{
+        width:40px;
+
+        height:60px;
+
+        font-size:48px;
     }
 
     .cat{
@@ -438,6 +1015,7 @@ button{
 
     .game{
         height:130px;
+
         font-size:16px;
     }
 
@@ -447,15 +1025,20 @@ button{
 
     .support{
         left:20px;
+
         bottom:78px;
-        font-size:18px;
+
         padding:13px 17px;
+
+        font-size:18px;
     }
 
     .wheel{
         right:12px;
-        font-size:48px;
+
         bottom:130px;
+
+        font-size:48px;
     }
 
     .login-form{
@@ -464,614 +1047,1738 @@ button{
 
     .input{
         height:62px;
+
         font-size:21px;
     }
 
     .code{
         font-size:32px;
     }
+
+    .brand-grid{
+        padding-left:18px;
+        padding-right:18px;
+
+        gap:22px 15px;
+    }
+
+    .person{
+        font-size:16px;
+    }
+
+    .person .sig{
+        font-size:34px;
+    }
 }
+
+@media(max-width:380px){
+
+    .logo{
+        width:145px;
+    }
+
+    .topbtn{
+        padding:0 6px;
+
+        font-size:14px;
+    }
+
+    .grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .game{
+        height:125px;
+    }
+
+    .bottom{
+        height:82px;
+    }
+
+    .nav .ni{
+        font-size:26px;
+    }
+}
+
 </style>
 </head>
 
+
 <body>
+
 
 <div class="app">
 
-<!-- =========================
+
+<!-- =====================================================
      HOME
-========================= -->
+===================================================== -->
 
 <section id="home" class="screen active">
 
+
 <header class="topbar">
 
-    <div class="menu">☰</div>
 
-    <div class="logo">
-        PLAY25
-    </div>
+<div class="menu"
+onclick="openMenu()">
+☰
+</div>
 
-    <button
-        class="topbtn agent"
-        onclick="show('agents')">
-        Agent List
-    </button>
 
-    <button
-        class="topbtn login"
-        onclick="show('login')">
-        👤 Login
-    </button>
+<div class="logo">
+
+<img src="assets/logo.png"
+alt="PLAY25 Logo"
+onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block';">
+
+<div id="logoFallback"
+class="logo-text"
+style="display:none">
+PLAY25
+</div>
+
+</div>
+
+
+<button
+class="topbtn agent"
+onclick="show('agents')">
+Agent List
+</button>
+
+
+<button
+class="topbtn login"
+onclick="show('login')">
+👤 Login
+</button>
+
 
 </header>
 
 
-<div class="banner">
+<!-- BANNER -->
 
-    <img
-        src="assets/home-banner.jpg"
-        alt="PLAY25">
+<div
+class="banner"
+id="banner">
+
+
+<div
+class="slides"
+id="slides">
+</div>
+
+
+<button
+class="arrow left"
+onclick="prevSlide()">
+‹
+</button>
+
+
+<button
+class="arrow right"
+onclick="nextSlide()">
+›
+</button>
+
+
+<div
+class="dots"
+id="dots">
+</div>
+
 
 </div>
 
+
+<!-- NOTICE -->
 
 <div class="notice">
-    📣 &nbsp; smart, play responsibly! 🧨🧨🧨
+
+<span>
+📣 &nbsp; smart, play responsibly! 🧨🧨🧨
+</span>
+
 </div>
 
+
+<!-- CATEGORY -->
 
 <div class="categories">
 
-    <div class="cat">
-        <span class="ico">⚽</span>
-        Sports
-    </div>
 
-    <div class="cat">
-        <span class="ico">🎴</span>
-        Casino
-    </div>
+<div class="cat">
 
-    <div class="cat">
-        <span class="ico">🎰</span>
-        Slots
-    </div>
+<span class="ico">
+⚽
+</span>
 
-    <div class="cat">
-        <span class="ico">♠️</span>
-        Table
-    </div>
-
-    <div class="cat">
-        <span class="ico">🚀</span>
-        Crash
-    </div>
-
-    <div class="cat">
-        <span class="ico">🎡</span>
-        Lottery
-    </div>
+Sports
 
 </div>
 
 
+<div class="cat">
+
+<span class="ico">
+🎴
+</span>
+
+Casino
+
+</div>
+
+
+<div class="cat">
+
+<span class="ico">
+🎰
+</span>
+
+Slots
+
+</div>
+
+
+<div class="cat">
+
+<span class="ico">
+♠️
+</span>
+
+Table
+
+</div>
+
+
+<div class="cat">
+
+<span class="ico">
+🚀
+</span>
+
+Crash
+
+</div>
+
+
+<div class="cat">
+
+<span class="ico">
+🎡
+</span>
+
+Lottery
+
+</div>
+
+
+</div>
+
+
+<!-- SPORT -->
+
 <main class="section">
 
-    <h2>
-        Sport
-    </h2>
 
-    <div class="grid">
-
-        <div class="game">
-            <div class="gi">🏏</div>
-            Cricket
-        </div>
-
-        <div class="game">
-            <div class="gi">9️⃣</div>
-            9wickets
-        </div>
-
-        <div class="game">
-            <div class="gi">⚽</div>
-            Soccer
-        </div>
-
-        <div class="game">
-            <div class="gi">🎾</div>
-            Tennis
-        </div>
-
-        <div class="game">
-            <div class="gi">🏆</div>
-            ESports
-        </div>
-
-        <div class="game">
-            <div class="gi">♞</div>
-            Horsebook
-        </div>
-
-        <div class="game">
-            <div class="gi">🐔</div>
-            SV388
-        </div>
-
-        <div class="game">
-            <div class="gi">S30</div>
-            PINN
-        </div>
-
-    </div>
+<h2>
+Sport
+</h2>
 
 
-    <h2 style="margin-top:20px">
-        Favourites
-    </h2>
+<div class="grid">
+
+
+<div class="game">
+<div class="gi">🏏</div>
+Cricket
+</div>
+
+
+<div class="game">
+<div class="gi">9️⃣</div>
+9wickets
+</div>
+
+
+<div class="game">
+<div class="gi">⚽</div>
+Soccer
+</div>
+
+
+<div class="game">
+<div class="gi">🎾</div>
+Tennis
+</div>
+
+
+<div class="game">
+<div class="gi">🏆</div>
+ESports
+</div>
+
+
+<div class="game">
+<div class="gi">♞</div>
+Horsebook
+</div>
+
+
+<div class="game">
+<div class="gi">🐔</div>
+SV388
+</div>
+
+
+<div class="game">
+<div class="gi">S30</div>
+PINNACLE
+</div>
+
+
+</div>
+
+
+<h2 style="margin-top:20px">
+Favourites
+</h2>
+
+
+<div class="favourites">
+
+
+<div class="favourite">
+<img
+src="assets/favourite-1.jpg"
+alt="Favourite 1">
+</div>
+
+
+<div class="favourite">
+<img
+src="assets/favourite-2.jpg"
+alt="Favourite 2">
+</div>
+
+
+</div>
+
 
 </main>
+
 
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      AGENT LIST
-========================= -->
+===================================================== -->
 
-<section id="agents" class="screen">
+<section
+id="agents"
+class="screen">
+
 
 <header class="topbar">
 
-    <div class="menu">☰</div>
 
-    <div class="logo">
-        PLAY25
-    </div>
+<div class="menu"
+onclick="openMenu()">
+☰
+</div>
 
-    <button
-        class="topbtn agent"
-        onclick="show('agents')">
-        Agent List
-    </button>
 
-    <button
-        class="topbtn login"
-        onclick="show('login')">
-        👤 Login
-    </button>
+<div class="logo">
+
+<img
+src="assets/logo.png"
+alt="PLAY25 Logo">
+
+</div>
+
+
+<button
+class="topbtn agent"
+onclick="show('agents')">
+Agent List
+</button>
+
+
+<button
+class="topbtn login"
+onclick="show('login')">
+👤 Login
+</button>
+
 
 </header>
 
 
 <div class="agent-tabs">
 
-    <div>Casino</div>
-    <div>Slots</div>
-    <div>Table</div>
-    <div>Crash</div>
-    <div class="sel">Lottery</div>
+
+<div>
+Casino
+</div>
+
+
+<div>
+Slots
+</div>
+
+
+<div>
+Table
+</div>
+
+
+<div>
+Crash
+</div>
+
+
+<div class="sel">
+Lottery
+</div>
+
 
 </div>
 
 
-<div style="
-height:165px;
-background:#eee;
-padding:0 28px;
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:18px;
-">
+<div class="agent-boxes">
 
-    <div style="
-    background:#fff;
-    border-radius:0 0 6px 6px;
-    font-size:22px;
-    padding:95px 20px 10px;
-    ">
-        Royal Gaming
-    </div>
 
-    <div style="
-    background:#fff;
-    border-radius:0 0 6px 6px;
-    font-size:22px;
-    padding:95px 20px 10px;
-    ">
-        Acewin
-    </div>
+<div class="agent-box">
+Royal Gaming
+</div>
+
+
+<div class="agent-box">
+Acewin
+</div>
+
 
 </div>
 
 
 <div class="brand-grid">
 
-    <div class="brand-title">
-        Brand Ambassador
-    </div>
+
+<div class="brand-title">
+Brand Ambassador
+</div>
 
 
-    <div class="person">
+<div class="person">
 
-        <div class="sig">
-            Prova
-        </div>
+<div class="sig">
+Prova
+</div>
 
-        Sadia Jahan Prova<br>
+Sadia Jahan Prova<br>
 
-        <em>
-            Model, Bangladeshi Actress<br>
-            2025 - present
-        </em>
-
-    </div>
-
-
-    <div class="person">
-
-        <div class="sig">
-            Nadia
-        </div>
-
-        Nadia Afrin Mim<br>
-
-        <em>
-            Model, Bangladeshi Actress<br>
-            2025 - Present
-        </em>
-
-    </div>
-
-
-    <div class="person">
-
-        <div class="sig">
-            Peya
-        </div>
-
-        Peya Bipasha<br>
-
-        <em>
-            Model, Bangladeshi Actress<br>
-            2025 - present
-        </em>
-
-    </div>
-
-
-    <div class="person">
-
-        <div class="sig">
-            Nirab
-        </div>
-
-        Nirab Hossain<br>
-
-        <em>
-            Model, Bangladeshi Actor<br>
-            2025 - Present
-        </em>
-
-    </div>
-
-
-    <div class="person">
-
-        <div class="sig">
-            Anika
-        </div>
-
-        Anika Kabir Shokh<br>
-
-        <em>
-            Model, Bangladeshi Actress<br>
-            2025 - present
-        </em>
-
-    </div>
-
-
-    <div class="person">
-
-        <div class="sig">
-            Shoumi
-        </div>
-
-        Samonty Shoumi<br>
-
-        <em>
-            Model, Bangladeshi Actress<br>
-            2025 - Present
-        </em>
-
-    </div>
-
-
-    <div class="person">
-
-        <div class="sig">
-            Zeba
-        </div>
-
-        Zeba Jannat<br>
-
-        <em>
-            Model, Bangladeshi Actress<br>
-            2026 - present
-        </em>
-
-    </div>
-
-
-    <div class="person">
-
-        <div class="sig">
-            Emon
-        </div>
-
-        Mammun Hasan Emon<br>
-
-        <em>
-            Model, Bangladeshi Actor<br>
-            2026 - Present
-        </em>
-
-    </div>
+<em>
+Model, Bangladeshi Actress<br>
+2025 - present
+</em>
 
 </div>
+
+
+<div class="person">
+
+<div class="sig">
+Nadia
+</div>
+
+Nadia Afrin Mim<br>
+
+<em>
+Model, Bangladeshi Actress<br>
+2025 - Present
+</em>
+
+</div>
+
+
+<div class="person">
+
+<div class="sig">
+Peya
+</div>
+
+Peya Bipasha<br>
+
+<em>
+Model, Bangladeshi Actress<br>
+2025 - present
+</em>
+
+</div>
+
+
+<div class="person">
+
+<div class="sig">
+Nirab
+</div>
+
+Nirab Hossain<br>
+
+<em>
+Model, Bangladeshi Actor<br>
+2025 - Present
+</em>
+
+</div>
+
+
+<div class="person">
+
+<div class="sig">
+Anika
+</div>
+
+Anika Kabir Shokh<br>
+
+<em>
+Model, Bangladeshi Actress<br>
+2025 - present
+</em>
+
+</div>
+
+
+<div class="person">
+
+<div class="sig">
+Shoumi
+</div>
+
+Samonty Shoumi<br>
+
+<em>
+Model, Bangladeshi Actress<br>
+2025 - Present
+</em>
+
+</div>
+
+
+<div class="person">
+
+<div class="sig">
+Zeba
+</div>
+
+Zeba Jannat<br>
+
+<em>
+Model, Bangladeshi Actress<br>
+2026 - present
+</em>
+
+</div>
+
+
+<div class="person">
+
+<div class="sig">
+Emon
+</div>
+
+Mammun Hasan Emon<br>
+
+<em>
+Model, Bangladeshi Actor<br>
+2026 - Present
+</em>
+
+</div>
+
+
+</div>
+
 
 </section>
 
 
-<!-- =========================
+<!-- =====================================================
      LOGIN
-========================= -->
+===================================================== -->
 
-<section id="login" class="screen">
+<section
+id="login"
+class="screen">
+
 
 <header class="topbar">
 
-    <div class="menu">☰</div>
 
-    <div class="logo">
-        PLAY25
-    </div>
+<div class="menu"
+onclick="openMenu()">
+☰
+</div>
 
-    <button
-        class="topbtn agent"
-        onclick="show('agents')">
-        Agent List
-    </button>
 
-    <button
-        class="topbtn login"
-        onclick="show('login')">
-        👤 Login
-    </button>
+<div class="logo">
+
+<img
+src="assets/logo.png"
+alt="PLAY25 Logo">
+
+</div>
+
+
+<button
+class="topbtn agent"
+onclick="show('agents')">
+Agent List
+</button>
+
+
+<button
+class="topbtn login"
+onclick="show('login')">
+👤 Login
+</button>
+
 
 </header>
 
 
 <div class="login-screen">
 
-    <div class="hero">
 
-        <img
-            src="assets/login-hero.jpg"
-            alt="Login">
-
-        <button
-            class="close"
-            onclick="show('home')">
-            ×
-        </button>
-
-    </div>
+<div class="hero">
 
 
-    <div class="login-form">
-
-        <input
-            class="input"
-            placeholder="Username">
+<img
+src="assets/login-hero.jpg"
+alt="Login">
 
 
-        <input
-            class="input"
-            type="password"
-            placeholder="Password">
+<button
+class="close"
+onclick="show('home')">
+×
+</button>
 
-
-        <div class="code-row">
-
-            <input
-                class="input"
-                placeholder="Validation Code">
-
-            <span class="code">
-                3983
-            </span>
-
-        </div>
-
-
-        <button
-            class="submit"
-            onclick="alert('Static demo: login is disabled.')">
-
-            Login
-
-        </button>
-
-
-        <div class="links">
-
-            <a href="#">
-                Privacy Policy
-            </a>
-
-            |
-
-            <a href="#">
-                Terms and Conditions
-            </a>
-
-            |
-
-            <a href="#">
-                Rules and Regulations
-            </a>
-
-            <br>
-
-            |
-
-            <a href="#">
-                KYC
-            </a>
-
-            |
-
-            <a href="#">
-                Responsible Gaming
-            </a>
-
-            |
-
-            <a href="#">
-                Self-Exclusion Policy
-            </a>
-
-            <br>
-
-            |
-
-            <a href="#">
-                Underage Policy
-            </a>
-
-            |
-
-            <a href="#">
-                Sponsor
-            </a>
-
-        </div>
-
-    </div>
 
 </div>
+
+
+<div class="login-form">
+
+
+<input
+class="input"
+placeholder="Username">
+
+
+<input
+class="input"
+type="password"
+placeholder="Password">
+
+
+<div class="code-row">
+
+
+<input
+class="input"
+placeholder="Validation Code">
+
+
+<span
+class="code"
+id="validationCode">
+3983
+</span>
+
+
+</div>
+
+
+<button
+class="submit"
+onclick="loginDemo()">
+
+Login
+
+</button>
+
+
+<div class="links">
+
+
+<a href="#">
+Privacy Policy
+</a>
+
+|
+
+<a href="#">
+Terms and Conditions
+</a>
+
+|
+
+<a href="#">
+Rules and Regulations
+</a>
+
+
+<br>
+
+
+|
+
+<a href="#">
+KYC
+</a>
+
+|
+
+<a href="#">
+Responsible Gaming
+</a>
+
+|
+
+<a href="#">
+Self-Exclusion Policy
+</a>
+
+
+<br>
+
+
+|
+
+<a href="#">
+Underage Policy
+</a>
+
+|
+
+<a href="#">
+Sponsor
+</a>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
 
 </section>
 
 
-<!-- =========================
-     FLOATING BUTTONS
-========================= -->
+<!-- =====================================================
+     FLOATING
+===================================================== -->
 
-<div class="support">
-    🎧 Support
+<div
+class="support"
+onclick="supportClick()">
+
+🎧 Support
+
 </div>
+
 
 <div class="wheel">
-    🎡
+🎡
 </div>
 
 
-<!-- =========================
+<!-- =====================================================
      BOTTOM NAV
-========================= -->
+===================================================== -->
 
 <nav class="bottom">
 
-    <div class="nav">
 
-        <div class="ni">
-            ⚔
-        </div>
+<div class="nav">
 
-        Exch
+<div class="ni">
+⚔
+</div>
 
-    </div>
+Exch
 
-
-    <div class="nav">
-
-        <div class="ni">
-            ◷
-        </div>
-
-        In-Play
-
-    </div>
+</div>
 
 
-    <div
-        class="nav active"
-        onclick="show('home')">
+<div class="nav">
 
-        <div class="ni">
-            ⌂
-        </div>
+<div class="ni">
+◷
+</div>
 
-        Home
+In-Play
 
-    </div>
+</div>
 
 
-    <div
-        class="nav"
-        onclick="show('agents')">
+<div
+class="nav active"
+onclick="show('home')">
 
-        <div class="ni">
-            👥
-        </div>
+<div class="ni">
+⌂
+</div>
 
-        Referral
+Home
 
-    </div>
+</div>
 
 
-    <div
-        class="nav"
-        onclick="show('login')">
+<div
+class="nav"
+onclick="show('agents')">
 
-        <div class="ni">
-            ●
-        </div>
+<div class="ni">
+👥
+</div>
 
-        Account
+Referral
 
-    </div>
+</div>
+
+
+<div
+class="nav"
+onclick="show('login')">
+
+<div class="ni">
+●
+</div>
+
+Account
+
+</div>
+
 
 </nav>
+
+
+<!-- =====================================================
+     SIDE MENU
+===================================================== -->
+
+<div
+class="drawer-bg"
+id="drawerBg"
+onclick="closeMenu()">
+
+
+<div
+class="drawer"
+onclick="event.stopPropagation()">
+
+
+<div class="drawer-head">
+PLAY25 Menu
+</div>
+
+
+<div
+class="drawer-item"
+onclick="show('home');closeMenu()">
+
+🏠 Home
+
+</div>
+
+
+<div
+class="drawer-item"
+onclick="show('agents');closeMenu()">
+
+👥 Agent List
+
+</div>
+
+
+<div
+class="drawer-item"
+onclick="show('login');closeMenu()">
+
+👤 Login
+
+</div>
+
+
+<div
+class="drawer-item"
+onclick="openAdmin()">
+
+⚙️ Admin Panel
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================================
+     ADMIN PANEL
+===================================================== -->
+
+<div
+class="admin"
+id="admin">
+
+
+<div class="admin-inner">
+
+
+<div class="admin-header">
+
+
+<h2>
+Banner Admin Panel
+</h2>
+
+
+<button
+class="admin-close"
+onclick="closeAdmin()">
+
+Close
+
+</button>
+
+
+</div>
+
+
+<div class="admin-body">
+
+
+<div class="admin-info">
+
+<b>Banner Management</b>
+
+<br><br>
+
+এখানে ৫টি Banner নির্বাচন করতে পারবেন।
+
+প্রতিটি Banner-এর জন্য ছবি নির্বাচন করুন এবং
+সবশেষে <b>Save 5 Banners</b> চাপুন।
+
+<br><br>
+
+এই frontend version-এ Banner ব্রাউজারের
+localStorage-এ সংরক্ষণ করা হবে।
+
+</div>
+
+
+<div id="adminSlots">
+</div>
+
+
+<button
+class="admin-save"
+onclick="saveBanners()">
+
+Save 5 Banners
+
+</button>
+
+
+<button
+class="admin-reset"
+onclick="resetBanners()">
+
+Reset
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
 
 </div>
 
 
 <script>
 
+/* =====================================================
+   DEFAULT BANNERS
+===================================================== */
+
+const DEFAULT_BANNERS = [
+
+"assets/banner-1.jpg",
+
+"assets/banner-2.jpg",
+
+"assets/banner-3.jpg",
+
+"assets/banner-4.jpg",
+
+"assets/banner-5.jpg"
+
+];
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let banners =
+loadBanners();
+
+let currentSlide = 0;
+
+let sliderTimer = null;
+
+let touchStartX = 0;
+
+
+/* =====================================================
+   LOAD BANNERS
+===================================================== */
+
+function loadBanners(){
+
+    try{
+
+        const saved =
+        JSON.parse(
+            localStorage.getItem(
+                "play25_banners"
+            )
+        );
+
+        if(
+            Array.isArray(saved) &&
+            saved.length === 5
+        ){
+
+            return saved;
+
+        }
+
+    }catch(error){
+
+        console.log(error);
+
+    }
+
+    return [...DEFAULT_BANNERS];
+
+}
+
+
+/* =====================================================
+   RENDER SLIDER
+===================================================== */
+
+function renderSlider(){
+
+    const slides =
+    document.getElementById("slides");
+
+    const dots =
+    document.getElementById("dots");
+
+
+    slides.innerHTML = "";
+
+    dots.innerHTML = "";
+
+
+    banners.forEach(
+        function(src,index){
+
+            const slide =
+            document.createElement("div");
+
+            slide.className =
+            "slide";
+
+
+            if(
+                index === currentSlide
+            ){
+
+                slide.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            const img =
+            document.createElement("img");
+
+            img.src = src;
+
+            img.alt =
+            "Banner "+(index+1);
+
+
+            img.onerror =
+            function(){
+
+                this.style.display =
+                "none";
+
+
+                const empty =
+                document.createElement(
+                    "div"
+                );
+
+                empty.className =
+                "slide-empty";
+
+                empty.innerText =
+                "Banner "+(index+1);
+
+
+                this.parentNode.appendChild(
+                    empty
+                );
+
+            };
+
+
+            slide.appendChild(img);
+
+            slides.appendChild(slide);
+
+
+            const dot =
+            document.createElement("span");
+
+            dot.className =
+            "dot";
+
+
+            if(
+                index === currentSlide
+            ){
+
+                dot.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            dot.onclick =
+            function(){
+
+                goSlide(index);
+
+                restartSlider();
+
+            };
+
+
+            dots.appendChild(dot);
+
+        }
+    );
+
+
+    restartSlider();
+
+}
+
+
+/* =====================================================
+   GO SLIDE
+===================================================== */
+
+function goSlide(index){
+
+    currentSlide =
+    (index + banners.length)
+    % banners.length;
+
+
+    document
+    .querySelectorAll(".slide")
+    .forEach(
+        function(slide,i){
+
+            slide.classList.toggle(
+                "active",
+                i === currentSlide
+            );
+
+        }
+    );
+
+
+    document
+    .querySelectorAll(".dot")
+    .forEach(
+        function(dot,i){
+
+            dot.classList.toggle(
+                "active",
+                i === currentSlide
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   NEXT
+===================================================== */
+
+function nextSlide(){
+
+    goSlide(
+        currentSlide + 1
+    );
+
+    restartSlider();
+
+}
+
+
+/* =====================================================
+   PREVIOUS
+===================================================== */
+
+function prevSlide(){
+
+    goSlide(
+        currentSlide - 1
+    );
+
+    restartSlider();
+
+}
+
+
+/* =====================================================
+   AUTO SLIDER
+===================================================== */
+
+function restartSlider(){
+
+    clearInterval(
+        sliderTimer
+    );
+
+
+    sliderTimer =
+    setInterval(
+        function(){
+
+            goSlide(
+                currentSlide + 1
+            );
+
+        },
+        5000
+    );
+
+}
+
+
+/* =====================================================
+   SWIPE
+===================================================== */
+
+const bannerElement =
+document.getElementById("banner");
+
+
+bannerElement.addEventListener(
+    "touchstart",
+    function(event){
+
+        touchStartX =
+        event.changedTouches[0]
+        .screenX;
+
+    },
+    {passive:true}
+);
+
+
+bannerElement.addEventListener(
+    "touchend",
+    function(event){
+
+        const touchEndX =
+        event.changedTouches[0]
+        .screenX;
+
+
+        const difference =
+        touchEndX -
+        touchStartX;
+
+
+        if(
+            Math.abs(difference) > 45
+        ){
+
+            if(
+                difference < 0
+            ){
+
+                nextSlide();
+
+            }else{
+
+                prevSlide();
+
+            }
+
+        }
+
+    },
+    {passive:true}
+);
+
+
+/* =====================================================
+   SCREEN SWITCH
+===================================================== */
+
 function show(id){
 
     document
-        .querySelectorAll('.screen')
-        .forEach(function(x){
+    .querySelectorAll(".screen")
+    .forEach(
+        function(screen){
 
-            x.classList.remove('active');
+            screen.classList.remove(
+                "active"
+            );
 
-        });
+        }
+    );
+
+
+    const target =
+    document.getElementById(id);
+
+
+    if(target){
+
+        target.classList.add(
+            "active"
+        );
+
+    }
 
 
     document
-        .getElementById(id)
-        .classList.add('active');
+    .querySelectorAll(".nav")
+    .forEach(
+        function(nav){
+
+            nav.classList.remove(
+                "active"
+            );
+
+        }
+    );
 
 
-    window.scrollTo(0,0);
+    const navs =
+    document.querySelectorAll(".nav");
+
+
+    if(id === "home"){
+
+        navs[2]
+        .classList.add("active");
+
+    }
+
+
+    if(id === "agents"){
+
+        navs[3]
+        .classList.add("active");
+
+    }
+
+
+    if(id === "login"){
+
+        navs[4]
+        .classList.add("active");
+
+    }
+
+
+    closeMenu();
+
+    window.scrollTo(
+        0,
+        0
+    );
 
 }
+
+
+/* =====================================================
+   SIDE MENU
+===================================================== */
+
+function openMenu(){
+
+    document.getElementById(
+        "drawerBg"
+    ).style.display = "block";
+
+}
+
+
+function closeMenu(){
+
+    document.getElementById(
+        "drawerBg"
+    ).style.display = "none";
+
+}
+
+
+/* =====================================================
+   SUPPORT
+===================================================== */
+
+function supportClick(){
+
+    alert(
+        "Support link এখানে আপনার নিজের WhatsApp / Telegram / Live Chat link বসাতে পারবেন।"
+    );
+
+}
+
+
+/* =====================================================
+   LOGIN DEMO
+===================================================== */
+
+function loginDemo(){
+
+    alert(
+        "এটি Frontend Demo। Login করার জন্য Backend/API সংযোগ করতে হবে।"
+    );
+
+}
+
+
+/* =====================================================
+   ADMIN OPEN
+===================================================== */
+
+function openAdmin(){
+
+    closeMenu();
+
+
+    const password =
+    prompt(
+        "Admin Password:"
+    );
+
+
+    if(
+        password !== "admin123"
+    ){
+
+        if(
+            password !== null
+        ){
+
+            alert(
+                "Wrong Password"
+            );
+
+        }
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "admin"
+    ).style.display = "block";
+
+
+    renderAdmin();
+
+}
+
+
+/* =====================================================
+   ADMIN CLOSE
+===================================================== */
+
+function closeAdmin(){
+
+    document.getElementById(
+        "admin"
+    ).style.display = "none";
+
+}
+
+
+/* =====================================================
+   ADMIN SLOTS
+===================================================== */
+
+function renderAdmin(){
+
+    const container =
+    document.getElementById(
+        "adminSlots"
+    );
+
+
+    container.innerHTML = "";
+
+
+    for(
+        let i = 0;
+        i < 5;
+        i++
+    ){
+
+        const slot =
+        document.createElement(
+            "div"
+        );
+
+        slot.className =
+        "admin-slot";
+
+
+        const label =
+        document.createElement(
+            "label"
+        );
+
+        label.innerText =
+        "Banner "+(i+1);
+
+
+        const input =
+        document.createElement(
+            "input"
+        );
+
+        input.type =
+        "file";
+
+        input.accept =
+        "image/*";
+
+
+        const preview =
+        document.createElement(
+            "img"
+        );
+
+        preview.className =
+        "admin-preview";
+
+        preview.src =
+        banners[i];
+
+
+        input.addEventListener(
+            "change",
+            function(){
+
+                const file =
+                input.files[0];
+
+
+                if(!file){
+
+                    return;
+
+                }
+
+
+                if(
+                    file.size >
+                    3 * 1024 * 1024
+                ){
+
+                    alert(
+                        "ছবির সাইজ 3MB-এর মধ্যে রাখুন।"
+                    );
+
+                    input.value =
+                    "";
+
+                    return;
+
+                }
+
+
+                const reader =
+                new FileReader();
+
+
+                reader.onload =
+                function(event){
+
+                    banners[i] =
+                    event.target.result;
+
+
+                    preview.src =
+                    event.target.result;
+
+                };
+
+
+                reader.readAsDataURL(
+                    file
+                );
+
+            }
+        );
+
+
+        slot.appendChild(
+            label
+        );
+
+        slot.appendChild(
+            input
+        );
+
+        slot.appendChild(
+            preview
+        );
+
+
+        container.appendChild(
+            slot
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SAVE BANNERS
+===================================================== */
+
+function saveBanners(){
+
+    try{
+
+        localStorage.setItem(
+            "play25_banners",
+            JSON.stringify(
+                banners
+            )
+        );
+
+
+        currentSlide = 0;
+
+
+        renderSlider();
+
+
+        alert(
+            "৫টি Banner সফলভাবে Save হয়েছে।"
+        );
+
+
+        closeAdmin();
+
+
+    }catch(error){
+
+        alert(
+            "ছবি Save করা যায়নি। ছবির সাইজ কমিয়ে আবার চেষ্টা করুন।"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   RESET BANNERS
+===================================================== */
+
+function resetBanners(){
+
+    const confirmReset =
+    confirm(
+        "Default Banner আবার সেট করবেন?"
+    );
+
+
+    if(!confirmReset){
+
+        return;
+
+    }
+
+
+    banners =
+    [...DEFAULT_BANNERS];
+
+
+    localStorage.removeItem(
+        "play25_banners"
+    );
+
+
+    currentSlide = 0;
+
+
+    renderSlider();
+
+    renderAdmin();
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+renderSlider();
 
 </script>
 
